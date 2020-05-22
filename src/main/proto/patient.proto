@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package ru.rtlabs.example;
+
+option java_package = "ru.rtlabs.example.protobuf";
+option java_multiple_files = true;
+option java_outer_classname = 'PatientProto';
+
+import "google/type/date.proto";
+import "google/protobuf/empty.proto";
+
+message Patient {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string patronymic_name = 4;
+    string doc = 5;
+    google.type.Date birthdate = 6;
+}
+
+message ListPatientsResponse {
+    repeated Patient patients = 1;
+}
+
+message CreatePatientRequest {
+    string first_name = 1;
+    string last_name = 2;
+    string patronymic_name = 3;
+    string doc = 4;
+    google.type.Date birthdate = 5;
+}
+
+message GetPatientByIdRequest {
+    string id = 1;
+}
+
+message SearchPatientsByDocRequest {
+    string doc = 1;
+}
+
+message SearchPatientsByNamesRequest {
+    string first_name = 1;
+    string last_name = 2;
+    string patronymic_name = 3;
+}
+
+service PatientService {
+    rpc ListPatients (google.protobuf.Empty) returns (ListPatientsResponse) {}
+    rpc GetPatientById (GetPatientByIdRequest) returns (Patient) {}
+    rpc SearchPatientsByDoc (SearchPatientsByDocRequest) returns (ListPatientsResponse) {}
+    rpc SearchPatientsByNames (SearchPatientsByNamesRequest) returns (ListPatientsResponse) {}
+    rpc CreatePatient (CreatePatientRequest) returns (Patient) {}
+}
